@@ -87,20 +87,24 @@ type GetRestaurantDataQuery = {
 
 const PageContainer = styled.div`
   display: flex;
-  width: 100%;
-  max-width: 390px;
+  width: 390px;
   margin: 0 auto;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
   gap: 14.75px;
-  border-radius: ${({ theme }) => theme.radii.coreRadiusXl};
-  background: ${({ theme }) =>
-    theme.colors.semanticColorsPagePrimaryBackgroundColor};
+  border-radius: 24px;
+  background: #fff;
   position: relative;
-  min-height: 100vh;
-`;
+  min-height: 822px;
 
+  @media (max-width: 390px) {
+    width: 100%;
+    margin: 0;
+    border-radius: 0;
+    min-height: 100vh;
+  }
+`;
 const MainContent = styled.div`
   display: flex;
   width: 100%;
@@ -218,14 +222,6 @@ const RestaurantPage: NextPage<RestaurantPageProps> = ({ restaurantID }) => {
                   size="s"
                   leadingIcon={() => <ArrowLeft size="s" />}
                   onClick={() => router.back()}
-                  style={{
-                    width: '36px',
-                    minHeight: '36px',
-                    padding: '0px 8px',
-                    borderRadius: '62.5rem',
-                    border: `1px solid ${data?.getRestaurant ? 'rgba(73,91,105,1)' : 'transparent'}`,
-                    background: 'hsla(0, 0%, 100%, 0)',
-                  }}
                 />
               </BackButtonContainer>
 
