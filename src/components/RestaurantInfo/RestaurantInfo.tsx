@@ -15,9 +15,7 @@ const RestaurantInfo: React.FC<RestaurantInfoProps> = ({ restaurant }) => {
   return (
     <S.Container>
       <S.HeaderSection>
-        <Heading variant="h2" weight="extraBold">
-          {restaurant.name}
-        </Heading>
+        <Heading variant="h2">{restaurant.name}</Heading>
         {aggregateRatings?.ratingValue && (
           <S.RatingContainer>
             <Rating variant="filled" size="s" />

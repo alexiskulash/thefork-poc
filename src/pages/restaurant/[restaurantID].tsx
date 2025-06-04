@@ -216,8 +216,16 @@ const RestaurantPage: NextPage<RestaurantPageProps> = ({ restaurantID }) => {
                 <Button
                   hierarchy="tertiary"
                   size="s"
-                  leadingIcon={() => <ArrowLeft />}
+                  leadingIcon={() => <ArrowLeft size="s" />}
                   onClick={() => router.back()}
+                  style={{
+                    width: '36px',
+                    minHeight: '36px',
+                    padding: '0px 8px',
+                    borderRadius: '62.5rem',
+                    border: `1px solid ${data?.getRestaurant ? 'rgba(73,91,105,1)' : 'transparent'}`,
+                    background: 'hsla(0, 0%, 100%, 0)',
+                  }}
                 />
               </BackButtonContainer>
 

@@ -15,6 +15,17 @@ export const Header = styled.div`
   width: 100%;
 `;
 
+export const SeeMoreButton = styled.div`
+  a {
+    text-decoration: underline;
+    text-decoration-style: solid;
+    text-decoration-skip-ink: auto;
+    text-decoration-thickness: auto;
+    text-underline-offset: auto;
+    text-underline-position: from-font;
+  }
+`;
+
 export const RestaurantsList = styled.div`
   display: flex;
   align-items: center;

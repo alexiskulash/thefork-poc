@@ -23,9 +23,17 @@ const RestaurantsSection: React.FC<RestaurantsSectionProps> = ({
           {title}
         </Text>
         {onSeeMore && (
-          <Button hierarchy="tertiary" size="s" onClick={onSeeMore}>
-            See more
-          </Button>
+          <S.SeeMoreButton>
+            <Button hierarchy="tertiary" size="s" onClick={onSeeMore}>
+              <Text
+                variant="t2"
+                weight="medium"
+                style={{ textDecoration: 'underline' }}
+              >
+                See more
+              </Text>
+            </Button>
+          </S.SeeMoreButton>
         )}
       </S.Header>
       <S.RestaurantsList>
