@@ -121,6 +121,20 @@ const BackButtonContainer = styled.div`
   margin-bottom: ${({ theme }) => theme.space.coreSpacing06};
 `;
 
+const BackButton = styled(Button)`
+  display: flex;
+  width: 36px;
+  min-height: 36px;
+  padding: 0px ${({ theme }) => theme.space.coreSpacing04};
+  justify-content: center;
+  align-items: center;
+  gap: ${({ theme }) => theme.space.coreSpacing03};
+  border-radius: ${({ theme }) => theme.radii.coreRadiusPill};
+  border: 1px solid
+    ${({ theme }) => theme.colors.semanticColorsBorderStrongColor};
+  background: ${({ theme }) => theme.colors.semanticSurfacesTransparentDefault};
+`;
+
 const PhotoGridContainer = styled.div`
   width: 100%;
   margin-bottom: ${({ theme }) => theme.space.coreSpacing06};
@@ -217,7 +231,7 @@ const RestaurantPage: NextPage<RestaurantPageProps> = ({ restaurantID }) => {
           <React.Fragment>
             <MainContent>
               <BackButtonContainer>
-                <Button
+                <BackButton
                   hierarchy="tertiary"
                   size="s"
                   leadingIcon={() => <ArrowLeft size="s" />}
