@@ -3,28 +3,24 @@ import styled from '@emotion/styled';
 export const PageContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
-  max-width: 390px;
+  width: 390px;
   height: 822px;
   background: ${({ theme }) =>
     theme.colors.semanticColorsPagePrimaryBackgroundColor};
-  border-radius: ${({ theme }) => theme.radii.coreRadiusXL || '24px'};
+  border-radius: 24px;
   position: relative;
   overflow: hidden;
+  margin: 0 auto;
 `;
-
 export const ContentContainer = styled.div`
   display: flex;
   flex-direction: column;
-  padding: ${({ theme }) => theme.space.coreSpacing11}
-    ${({ theme }) => theme.space.coreSpacing06}
-    ${({ theme }) => theme.space.coreSpacing08}
-    ${({ theme }) => theme.space.coreSpacing06};
+  padding: ${({ theme }) => theme.space.coreSpacing11} 21px
+    ${({ theme }) => theme.space.coreSpacing08} 21px;
   gap: ${({ theme }) => theme.space.coreSpacing08};
   flex: 1;
   overflow-y: auto;
 `;
-
 export const BackButtonContainer = styled.div`
   display: flex;
   align-items: center;
