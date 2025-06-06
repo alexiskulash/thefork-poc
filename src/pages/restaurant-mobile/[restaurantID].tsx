@@ -8,6 +8,11 @@ import { Restaurant, TopRestaurantResult } from '@/types/api';
 import Callout from '@/design-system/Callout/Callout';
 import Spinner from '@/design-system/Spinner/Spinner';
 import { HStack } from '@/design-system/Stack/Stack';
+import {
+  mockRestaurants,
+  getRestaurantById,
+  getRestaurantsByCity,
+} from '@/data/mockRestaurants';
 import styled from '@emotion/styled';
 
 export const GET_RESTAURANT_PAGE_DATA = gql`
@@ -105,17 +110,25 @@ const RestaurantMobilePage: NextPage<RestaurantMobilePageProps> = ({
     GET_RESTAURANT_PAGE_DATA,
     {
       variables: { restaurantID },
+      errorPolicy: 'ignore', // Ignore GraphQL errors to fallback to mock data
     }
   );
 
-  const restaurant = data?.getRestaurant;
+  // Use GraphQL data if available, otherwise fallback to mock data
+  const restaurant = data?.getRestaurant || getRestaurantById(restaurantID);
   const topRestaurantsResults = data?.getTopRestaurants.find(({ city }) => {
     return city.name === restaurant?.address.locality;
   });
   const restaurantCity = topRestaurantsResults?.city;
-  const otherRestaurants = topRestaurantsResults?.restaurants?.filter(
-    (r) => r.id !== restaurant?.id
-  );
+  const otherRestaurants =
+    topRestaurantsResults?.restaurants?.filter(
+      (r) => r.id !== restaurant?.id
+    ) ||
+    (restaurant
+      ? getRestaurantsByCity(restaurant.address.locality).filter(
+          (r) => r.id !== restaurant.id
+        )
+      : []);
 
   const pageTitle = restaurant
     ? `Restaurant - ${restaurant.name}`
@@ -133,15 +146,7 @@ const RestaurantMobilePage: NextPage<RestaurantMobilePageProps> = ({
         ogImage={restaurant?.photo}
       />
       <PageContainer>
-        {error ? (
-          <LoadingContainer>
-            <Callout
-              collapsible={false}
-              intent="alert"
-              description="Error loading data. Please try again later."
-            />
-          </LoadingContainer>
-        ) : loading ? (
+        {loading && !restaurant ? (
           <LoadingContainer>
             <Spinner
               aria-label="Loading the restaurant information..."
@@ -152,7 +157,7 @@ const RestaurantMobilePage: NextPage<RestaurantMobilePageProps> = ({
           <RestaurantInfo
             restaurant={restaurant}
             relatedRestaurants={otherRestaurants}
-            cityName={restaurantCity?.name}
+            cityName={restaurantCity?.name || restaurant.address.locality}
           />
         ) : (
           <LoadingContainer>
