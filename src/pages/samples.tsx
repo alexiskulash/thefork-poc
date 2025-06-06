@@ -124,6 +124,29 @@ const samples = [
     href: '/restaurant-mobile/1',
   },
   {
+    id: 'spice-route',
+    title: 'Spice Route',
+    description:
+      'Mobile restaurant page showcasing Indian cuisine with different layout and content',
+    type: 'Mobile Restaurant Page',
+    href: '/restaurant-mobile/2',
+  },
+  {
+    id: 'bella-vista',
+    title: 'Bella Vista',
+    description: 'Mobile restaurant page featuring Italian dining experience',
+    type: 'Mobile Restaurant Page',
+    href: '/restaurant-mobile/3',
+  },
+  {
+    id: 'ocean-breeze',
+    title: 'Ocean Breeze',
+    description:
+      'Mobile restaurant page highlighting coastal cuisine and seafood',
+    type: 'Mobile Restaurant Page',
+    href: '/restaurant-mobile/4',
+  },
+  {
     id: 'classic-restaurant',
     title: 'Classic Restaurant View',
     description:
