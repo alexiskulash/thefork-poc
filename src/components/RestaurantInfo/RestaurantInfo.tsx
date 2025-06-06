@@ -35,6 +35,16 @@ const RestaurantInfo: React.FC<RestaurantInfoProps> = ({
     console.log('Book now clicked for restaurant:', restaurant.id);
   };
 
+  const getFoodType = (restaurantName: string): string => {
+    const foodTypes: Record<string, string> = {
+      'Culinary Haven': 'Modern European',
+      'Spice Route': 'Indian Cuisine',
+      'Bella Vista': 'Italian',
+      'Ocean Breeze': 'Seafood & Mediterranean',
+    };
+    return foodTypes[restaurantName] || 'International';
+  };
+
   const restaurantImages = restaurant.photo ? [restaurant.photo] : [];
   // Add sample images for demo purposes
   const sampleImages = [
@@ -121,7 +131,7 @@ const RestaurantInfo: React.FC<RestaurantInfoProps> = ({
             <S.MetadataRow>
               <Cover size="s" />
               <Text variant="t2" color="secondary">
-                Modern European
+                {getFoodType(restaurant.name)}
               </Text>
             </S.MetadataRow>
           </S.RestaurantMetadata>
