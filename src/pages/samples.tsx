@@ -1,6 +1,7 @@
 import React from 'react';
 import { NextPage } from 'next';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import styled from '@emotion/styled';
 
 import SEO from '@/components/SEO';
@@ -8,7 +9,8 @@ import { Container } from '@/components/Container';
 import Heading from '@/design-system/Heading/Heading';
 import Text from '@/design-system/Text/Text';
 import Button from '@/design-system/Button/Button';
-import { VStack } from '@/design-system/Stack/Stack';
+import { VStack, HStack } from '@/design-system/Stack/Stack';
+import { ArrowLeft } from '@/design-system/icons';
 
 const PageContainer = styled.div`
   min-height: 100vh;
@@ -172,6 +174,12 @@ const samples = [
 ];
 
 const SamplesPage: NextPage = () => {
+  const router = useRouter();
+
+  const handleBackClick = () => {
+    router.push('/');
+  };
+
   return (
     <React.Fragment>
       <SEO
@@ -182,6 +190,16 @@ const SamplesPage: NextPage = () => {
 
       <PageContainer>
         <Container>
+          <HStack spacing="coreSpacing06" style={{ marginBottom: '2rem' }}>
+            <Button
+              hierarchy="tertiary"
+              leadingIcon={() => <ArrowLeft size="s" />}
+              onClick={handleBackClick}
+            >
+              Back to Home
+            </Button>
+          </HStack>
+
           <HeaderSection>
             <VStack spacing="coreSpacing05">
               <Heading variant="h1">Design Samples</Heading>
@@ -191,7 +209,6 @@ const SamplesPage: NextPage = () => {
               </Text>
             </VStack>
           </HeaderSection>
-
           <SamplesGrid>
             {samples.map((sample) => (
               <SampleCard key={sample.id}>
