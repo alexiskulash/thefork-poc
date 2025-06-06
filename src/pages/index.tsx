@@ -2,15 +2,17 @@ import React from 'react';
 import { NextPage } from 'next';
 import { gql, useQuery } from '@apollo/client';
 import styled from '@emotion/styled';
+import Link from 'next/link';
 
 import { Container, containerPaddingStyle } from '@/components/Container';
 import SEO from '@/components/SEO';
 import { TopRestaurantResult } from '@/types/api';
 import Callout from '@/design-system/Callout/Callout';
 import Spinner from '@/design-system/Spinner/Spinner';
-import { HStack } from '@/design-system/Stack/Stack';
+import { HStack, VStack } from '@/design-system/Stack/Stack';
 import TopRestaurantsList from '@/components/TopRestaurantsList/TopRestaurantsList';
 import { Heading } from '@/design-system/Heading/Heading.styles';
+import Button from '@/design-system/Button/Button';
 
 export const GET_HOME_PAGE_DATA = gql`
   query GetHomePageData {
@@ -69,16 +71,28 @@ const HomagePage: NextPage = () => {
           </HStack>
         ) : (
           <React.Fragment>
-            <StyledHeading variant="h1" marginBottom="coreSpacing09">
-              Discover our restaurants
-            </StyledHeading>
-            {data?.getTopRestaurants.map((results) => (
-              <TopRestaurantsList
-                key={results.city.id}
-                restaurants={results.restaurants}
-                city={results.city}
-              />
-            ))}
+            <VStack spacing="coreSpacing09">
+              <div style={{ textAlign: 'center' }}>
+                <VStack spacing="coreSpacing05">
+                  <StyledHeading variant="h1">
+                    Discover our restaurants
+                  </StyledHeading>
+                  <Link href="/samples" passHref>
+                    <Button hierarchy="secondary">View Design Samples</Button>
+                  </Link>
+                </VStack>
+              </div>
+
+              <div>
+                {data?.getTopRestaurants.map((results) => (
+                  <TopRestaurantsList
+                    key={results.city.id}
+                    restaurants={results.restaurants}
+                    city={results.city}
+                  />
+                ))}
+              </div>
+            </VStack>
           </React.Fragment>
         )}
       </Container>
