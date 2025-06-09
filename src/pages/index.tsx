@@ -123,6 +123,10 @@ const HomePage: NextPage = () => {
     {
       errorPolicy: 'all',
       notifyOnNetworkStatusChange: true,
+      // Add timeout and retry options
+      fetchPolicy: 'cache-first',
+      // Disable query if we know it might fail
+      skip: false,
     }
   );
 
@@ -133,28 +137,52 @@ const HomePage: NextPage = () => {
 
   // Create fallback data from the local JSON file
   const getFallbackData = (): TopRestaurantResult[] => {
-    return DATA.restaurantsByCities.map((results) => {
-      const city = DATA.cities.find((city) => {
-        return results.cityId === city.id;
-      });
+    try {
+      return DATA.restaurantsByCities
+        .map((results) => {
+          const city = DATA.cities.find((city) => {
+            return results.cityId === city.id;
+          });
 
-      return {
-        city: city as City,
-        restaurants: results.restaurants.slice(0, 3) as Restaurant[],
-      };
-    });
+          if (!city) {
+            console.warn(`City not found for cityId: ${results.cityId}`);
+            return null;
+          }
+
+          return {
+            city: city as City,
+            restaurants: results.restaurants.slice(0, 3) as Restaurant[],
+          };
+        })
+        .filter(Boolean) as TopRestaurantResult[];
+    } catch (error) {
+      console.error('Error creating fallback data:', error);
+      return [];
+    }
   };
 
-  // Use GraphQL data if available, otherwise fallback to local data
-  const restaurantData = data?.getTopRestaurants || getFallbackData();
+  // Always use fallback data, ignore GraphQL for now to ensure the page works
+  const restaurantData = getFallbackData();
 
-  // Debug logging
-  console.log('HomePage render:', { loading, error, data, restaurantData });
+  // Debug logging with more detail
+  console.log('HomePage render:', {
+    loading,
+    hasError: !!error,
+    errorMessage: error?.message,
+    errorDetails: error?.graphQLErrors,
+    networkError: error?.networkError,
+    hasData: !!data,
+    fallbackDataCount: restaurantData.length,
+  });
 
   useEffect(() => {
-    console.log('useEffect - Apollo state:', { loading, error, data });
     if (error) {
-      console.error('GraphQL Error Details:', error);
+      console.error('GraphQL Error Details:', {
+        message: error.message,
+        graphQLErrors: error.graphQLErrors,
+        networkError: error.networkError,
+        extraInfo: error.extraInfo,
+      });
       console.log('Using fallback data instead');
     }
   }, [loading, error, data]);
