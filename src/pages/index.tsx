@@ -117,6 +117,9 @@ const HomePage: NextPage = () => {
     window.location.href = '/cities';
   };
 
+  // Debug logging
+  console.log('HomePage render:', { loading, error, data });
+
   return (
     <React.Fragment>
       <SEO
@@ -130,7 +133,7 @@ const HomePage: NextPage = () => {
             <Callout
               collapsible={false}
               intent="alert"
-              description="Error loading data. Please try again later."
+              description={`Error loading data: ${error.message}. Please try again later.`}
             />
           </MainContent>
         ) : loading ? (
@@ -144,13 +147,17 @@ const HomePage: NextPage = () => {
             <MainContent>
               <PageTitle as="h1">Discover our restaurants</PageTitle>
               <ShelvesContainer>
-                {data?.getTopRestaurants.map((results) => (
-                  <RestaurantShelf
-                    key={results.city.id}
-                    restaurants={results.restaurants}
-                    city={results.city}
-                  />
-                ))}
+                {data?.getTopRestaurants?.length ? (
+                  data.getTopRestaurants.map((results) => (
+                    <RestaurantShelf
+                      key={results.city.id}
+                      restaurants={results.restaurants}
+                      city={results.city}
+                    />
+                  ))
+                ) : (
+                  <div>No restaurant data available</div>
+                )}
               </ShelvesContainer>
             </MainContent>
             <StyledButtonDock>
@@ -169,5 +176,4 @@ const HomePage: NextPage = () => {
     </React.Fragment>
   );
 };
-
 export default HomePage;
