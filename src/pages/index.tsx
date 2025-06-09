@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { NextPage } from 'next';
+import { gql, useQuery } from '@apollo/client';
 import styled from '@emotion/styled';
 
 import SEO from '@/components/SEO';
@@ -9,6 +10,43 @@ import Button from '@/design-system/Button/Button';
 import ButtonDock from '@/design-system/ButtonDock/ButtonDock';
 import RestaurantShelf from '@/components/RestaurantShelf/RestaurantShelf';
 import DATA from '@/pages/api/data.json';
+
+export const GET_HOME_PAGE_DATA = gql`
+  query GetHomePageData {
+    getTopRestaurants {
+      city {
+        id
+        name
+        photo
+      }
+      restaurants {
+        id
+        slug
+        name
+        photo
+        aggregateRatings {
+          ratingValue
+          reviewCount
+        }
+        address {
+          locality
+          street
+          country
+          zipCode
+        }
+        averagePrice {
+          value
+          currency
+        }
+        bestOffer
+      }
+    }
+  }
+`;
+
+type GetHomePageDataQuery = {
+  getTopRestaurants: [TopRestaurantResult];
+};
 
 const PageContainer = styled.div`
   width: 100%;
@@ -76,13 +114,33 @@ const StyledButtonDock = styled(ButtonDock)`
 `;
 
 const HomePage: NextPage = () => {
+  const [useFallback, setUseFallback] = useState(false);
+
+  // Try GraphQL query but handle errors gracefully
+  const { loading, error, data } = useQuery<GetHomePageDataQuery>(
+    GET_HOME_PAGE_DATA,
+    {
+      errorPolicy: 'all',
+      notifyOnNetworkStatusChange: true,
+      onError: (apolloError) => {
+        console.warn(
+          'GraphQL query failed, using fallback data:',
+          apolloError.message
+        );
+        setUseFallback(true);
+      },
+      // Skip if we already decided to use fallback
+      skip: useFallback,
+    }
+  );
+
   const handleExploreCities = () => {
     // Navigate to cities page
     window.location.href = '/cities';
   };
 
-  // Create restaurant data from the local JSON file
-  const getRestaurantData = (): TopRestaurantResult[] => {
+  // Create fallback data from the local JSON file
+  const getFallbackData = (): TopRestaurantResult[] => {
     try {
       return DATA.restaurantsByCities
         .map((results) => {
@@ -102,16 +160,40 @@ const HomePage: NextPage = () => {
         })
         .filter(Boolean) as TopRestaurantResult[];
     } catch (error) {
-      console.error('Error creating restaurant data:', error);
+      console.error('Error creating fallback data:', error);
       return [];
     }
   };
 
-  const restaurantData = getRestaurantData();
+  // Determine which data to use
+  const restaurantData = React.useMemo(() => {
+    if (data?.getTopRestaurants && !error) {
+      console.log('Using GraphQL data');
+      return data.getTopRestaurants;
+    } else {
+      console.log('Using fallback data');
+      return getFallbackData();
+    }
+  }, [data, error]);
 
-  console.log('HomePage rendering with data:', {
+  // Auto-fallback after timeout
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (loading && !data && !useFallback) {
+        console.log('GraphQL query timeout, switching to fallback data');
+        setUseFallback(true);
+      }
+    }, 3000); // 3 second timeout
+
+    return () => clearTimeout(timeout);
+  }, [loading, data, useFallback]);
+
+  console.log('HomePage state:', {
+    loading,
+    hasError: !!error,
+    hasData: !!data,
+    useFallback,
     restaurantDataCount: restaurantData.length,
-    cities: restaurantData.map((r) => r.city.name),
   });
 
   return (
@@ -122,8 +204,14 @@ const HomePage: NextPage = () => {
         canonical={`https://www.thefork.com/`}
       />
       <PageContainer>
-        {!restaurantData?.length ? (
+        {!restaurantData?.length && loading && !useFallback ? (
           <MainContent>
+            <PageTitle>Discover our restaurants</PageTitle>
+            <div>Loading restaurants...</div>
+          </MainContent>
+        ) : !restaurantData?.length ? (
+          <MainContent>
+            <PageTitle>Discover our restaurants</PageTitle>
             <div>No restaurant data available</div>
           </MainContent>
         ) : (
