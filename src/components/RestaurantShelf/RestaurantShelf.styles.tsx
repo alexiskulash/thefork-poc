@@ -32,6 +32,26 @@ export const SectionTitle = styled.div`
     font-weight: 700;
     color: ${({ theme }) => theme.colors.semanticColorsTextPrimary};
     line-height: 150%;
+    margin: 0;
+  }
+`;
+
+export const SeeMoreButton = styled.div`
+  button {
+    font-family:
+      'Montserrat',
+      -apple-system,
+      Roboto,
+      Helvetica,
+      sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: ${({ theme }) => theme.colors.semanticColorsTextPrimary};
+    text-decoration: underline;
+    min-height: 36px;
+    border-radius: ${({ theme }) => theme.radii.coreRadiusS};
+    background: ${({ theme }) =>
+      theme.colors.semanticSurfacesTransparentDefault};
   }
 `;
 
