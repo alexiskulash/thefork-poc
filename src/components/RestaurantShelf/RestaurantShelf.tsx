@@ -28,13 +28,13 @@ const RestaurantShelf: React.FC<RestaurantShelfProps> = ({
     <S.SectionWrapper>
       <S.SectionHeader>
         <S.SectionTitle>
-          <Text variant="t1" weight="bold" as="h2">
-            Best restaurants in {city.name}
-          </Text>
+          <h2>Best restaurants in {city.name}</h2>
         </S.SectionTitle>
-        <Button hierarchy="ghost-compact" size="m" onClick={handleSeeMore}>
-          See more
-        </Button>
+        <S.SeeMoreButton>
+          <Button hierarchy="ghost-compact" size="m" onClick={handleSeeMore}>
+            See more
+          </Button>
+        </S.SeeMoreButton>
       </S.SectionHeader>
       <S.RestaurantsList>
         {displayRestaurants.map((restaurant) => (
