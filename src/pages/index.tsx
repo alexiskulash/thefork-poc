@@ -184,7 +184,7 @@ const HomePage: NextPage = () => {
         ) : (
           <React.Fragment>
             <MainContent>
-              <PageTitle as="h1">Discover our restaurants</PageTitle>
+              <PageTitle>Discover our restaurants</PageTitle>
               <ShelvesContainer>
                 {restaurantData?.length ? (
                   restaurantData.map((results) => (
