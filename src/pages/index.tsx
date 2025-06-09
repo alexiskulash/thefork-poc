@@ -5,7 +5,7 @@ import styled from '@emotion/styled';
 
 import { Container, containerPaddingStyle } from '@/components/Container';
 import SEO from '@/components/SEO';
-import { TopRestaurantResult } from '@/types/api';
+import { TopRestaurantResult, City, Restaurant } from '@/types/api';
 import Callout from '@/design-system/Callout/Callout';
 import Spinner from '@/design-system/Spinner/Spinner';
 import { HStack } from '@/design-system/Stack/Stack';
@@ -13,6 +13,7 @@ import { Heading } from '@/design-system/Heading/Heading.styles';
 import Button from '@/design-system/Button/Button';
 import ButtonDock from '@/design-system/ButtonDock/ButtonDock';
 import RestaurantShelf from '@/components/RestaurantShelf/RestaurantShelf';
+import DATA from '@/pages/api/data.json';
 
 export const GET_HOME_PAGE_DATA = gql`
   query GetHomePageData {
@@ -129,13 +130,31 @@ const HomePage: NextPage = () => {
     window.location.href = '/cities';
   };
 
+  // Create fallback data from the local JSON file
+  const getFallbackData = (): TopRestaurantResult[] => {
+    return DATA.restaurantsByCities.map((results) => {
+      const city = DATA.cities.find((city) => {
+        return results.cityId === city.id;
+      });
+
+      return {
+        city: city as City,
+        restaurants: results.restaurants.slice(0, 3) as Restaurant[],
+      };
+    });
+  };
+
+  // Use GraphQL data if available, otherwise fallback to local data
+  const restaurantData = data?.getTopRestaurants || getFallbackData();
+
   // Debug logging
-  console.log('HomePage render:', { loading, error, data });
+  console.log('HomePage render:', { loading, error, data, restaurantData });
 
   useEffect(() => {
     console.log('useEffect - Apollo state:', { loading, error, data });
     if (error) {
       console.error('GraphQL Error Details:', error);
+      console.log('Using fallback data instead');
     }
   }, [loading, error, data]);
 
@@ -147,7 +166,7 @@ const HomePage: NextPage = () => {
         canonical={`https://www.thefork.com/`}
       />
       <PageContainer>
-        {error ? (
+        {error && !restaurantData?.length ? (
           <MainContent>
             <Callout
               collapsible={false}
@@ -155,7 +174,7 @@ const HomePage: NextPage = () => {
               description={`Error loading data: ${error.message}. Please try again later.`}
             />
           </MainContent>
-        ) : loading ? (
+        ) : loading && !restaurantData?.length ? (
           <MainContent>
             <HStack horizontalAlign="center">
               <Spinner aria-label="Loading the city information..." size="l" />
@@ -166,8 +185,8 @@ const HomePage: NextPage = () => {
             <MainContent>
               <PageTitle as="h1">Discover our restaurants</PageTitle>
               <ShelvesContainer>
-                {data?.getTopRestaurants?.length ? (
-                  data.getTopRestaurants.map((results) => (
+                {restaurantData?.length ? (
+                  restaurantData.map((results) => (
                     <RestaurantShelf
                       key={results.city.id}
                       restaurants={results.restaurants}
@@ -195,4 +214,5 @@ const HomePage: NextPage = () => {
     </React.Fragment>
   );
 };
+
 export default HomePage;
