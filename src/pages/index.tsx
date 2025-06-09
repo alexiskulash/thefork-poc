@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { NextPage } from 'next';
 import { gql, useQuery } from '@apollo/client';
 import styled from '@emotion/styled';
