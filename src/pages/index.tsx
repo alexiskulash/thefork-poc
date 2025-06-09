@@ -116,8 +116,13 @@ const StyledButtonDock = styled(ButtonDock)`
 `;
 
 const HomePage: NextPage = () => {
-  const { loading, error, data } =
-    useQuery<GetHomePageDataQuery>(GET_HOME_PAGE_DATA);
+  const { loading, error, data } = useQuery<GetHomePageDataQuery>(
+    GET_HOME_PAGE_DATA,
+    {
+      errorPolicy: 'all',
+      notifyOnNetworkStatusChange: true,
+    }
+  );
 
   const handleExploreCities = () => {
     // Navigate to cities page
@@ -126,6 +131,13 @@ const HomePage: NextPage = () => {
 
   // Debug logging
   console.log('HomePage render:', { loading, error, data });
+
+  useEffect(() => {
+    console.log('useEffect - Apollo state:', { loading, error, data });
+    if (error) {
+      console.error('GraphQL Error Details:', error);
+    }
+  }, [loading, error, data]);
 
   return (
     <React.Fragment>
