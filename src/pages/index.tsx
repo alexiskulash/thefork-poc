@@ -1,56 +1,14 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { NextPage } from 'next';
-import { gql, useQuery } from '@apollo/client';
 import styled from '@emotion/styled';
 
-import { Container, containerPaddingStyle } from '@/components/Container';
 import SEO from '@/components/SEO';
 import { TopRestaurantResult, City, Restaurant } from '@/types/api';
-import Callout from '@/design-system/Callout/Callout';
-import Spinner from '@/design-system/Spinner/Spinner';
-import { HStack } from '@/design-system/Stack/Stack';
 import { Heading } from '@/design-system/Heading/Heading.styles';
 import Button from '@/design-system/Button/Button';
 import ButtonDock from '@/design-system/ButtonDock/ButtonDock';
 import RestaurantShelf from '@/components/RestaurantShelf/RestaurantShelf';
 import DATA from '@/pages/api/data.json';
-
-export const GET_HOME_PAGE_DATA = gql`
-  query GetHomePageData {
-    getTopRestaurants {
-      city {
-        id
-        name
-        photo
-      }
-      restaurants {
-        id
-        slug
-        name
-        photo
-        aggregateRatings {
-          ratingValue
-          reviewCount
-        }
-        address {
-          locality
-          street
-          country
-          zipCode
-        }
-        averagePrice {
-          value
-          currency
-        }
-        bestOffer
-      }
-    }
-  }
-`;
-
-type GetHomePageDataQuery = {
-  getTopRestaurants: [TopRestaurantResult];
-};
 
 const PageContainer = styled.div`
   width: 100%;
@@ -118,26 +76,13 @@ const StyledButtonDock = styled(ButtonDock)`
 `;
 
 const HomePage: NextPage = () => {
-  // Temporarily disable GraphQL query to prevent Apollo errors
-  // This ensures the page works with fallback data while we debug the GraphQL issue
-  const { loading, error, data } = useQuery<GetHomePageDataQuery>(
-    GET_HOME_PAGE_DATA,
-    {
-      errorPolicy: 'all',
-      notifyOnNetworkStatusChange: true,
-      fetchPolicy: 'cache-first',
-      // Skip the query to prevent Apollo errors for now
-      skip: true,
-    }
-  );
-
   const handleExploreCities = () => {
     // Navigate to cities page
     window.location.href = '/cities';
   };
 
-  // Create fallback data from the local JSON file
-  const getFallbackData = (): TopRestaurantResult[] => {
+  // Create restaurant data from the local JSON file
+  const getRestaurantData = (): TopRestaurantResult[] => {
     try {
       return DATA.restaurantsByCities
         .map((results) => {
@@ -157,36 +102,17 @@ const HomePage: NextPage = () => {
         })
         .filter(Boolean) as TopRestaurantResult[];
     } catch (error) {
-      console.error('Error creating fallback data:', error);
+      console.error('Error creating restaurant data:', error);
       return [];
     }
   };
 
-  // Always use fallback data, ignore GraphQL for now to ensure the page works
-  const restaurantData = getFallbackData();
+  const restaurantData = getRestaurantData();
 
-  // Debug logging with more detail
-  console.log('HomePage render:', {
-    loading,
-    hasError: !!error,
-    errorMessage: error?.message,
-    errorDetails: error?.graphQLErrors,
-    networkError: error?.networkError,
-    hasData: !!data,
-    fallbackDataCount: restaurantData.length,
+  console.log('HomePage rendering with data:', {
+    restaurantDataCount: restaurantData.length,
+    cities: restaurantData.map((r) => r.city.name),
   });
-
-  useEffect(() => {
-    if (error) {
-      console.error('GraphQL Error Details:', {
-        message: error.message,
-        graphQLErrors: error.graphQLErrors,
-        networkError: error.networkError,
-        extraInfo: error.extraInfo,
-      });
-      console.log('Using fallback data instead');
-    }
-  }, [loading, error, data]);
 
   return (
     <React.Fragment>
@@ -198,20 +124,7 @@ const HomePage: NextPage = () => {
       <PageContainer>
         {!restaurantData?.length ? (
           <MainContent>
-            {error ? (
-              <Callout
-                collapsible={false}
-                intent="alert"
-                description="Unable to load restaurant data. Please try refreshing the page."
-              />
-            ) : (
-              <HStack horizontalAlign="center">
-                <Spinner
-                  aria-label="Loading the city information..."
-                  size="l"
-                />
-              </HStack>
-            )}
+            <div>No restaurant data available</div>
           </MainContent>
         ) : (
           <React.Fragment>
