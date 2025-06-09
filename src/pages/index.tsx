@@ -70,7 +70,7 @@ const MainContent = styled.div`
   gap: ${({ theme }) => theme.space.coreSpacing09};
 `;
 
-const PageTitle = styled(Heading)`
+const PageTitle = styled.h1`
   align-self: stretch;
   font-family:
     'Montserrat',
@@ -82,6 +82,7 @@ const PageTitle = styled(Heading)`
   font-weight: 700;
   line-height: 130%;
   color: ${({ theme }) => theme.colors.semanticColorsTextPrimary};
+  margin: 0;
 `;
 
 const ShelvesContainer = styled.div`
