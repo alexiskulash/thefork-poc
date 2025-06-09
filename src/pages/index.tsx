@@ -195,36 +195,35 @@ const HomePage: NextPage = () => {
         canonical={`https://www.thefork.com/`}
       />
       <PageContainer>
-        {error && !restaurantData?.length ? (
+        {!restaurantData?.length ? (
           <MainContent>
-            <Callout
-              collapsible={false}
-              intent="alert"
-              description={`Error loading data: ${error.message}. Please try again later.`}
-            />
-          </MainContent>
-        ) : loading && !restaurantData?.length ? (
-          <MainContent>
-            <HStack horizontalAlign="center">
-              <Spinner aria-label="Loading the city information..." size="l" />
-            </HStack>
+            {error ? (
+              <Callout
+                collapsible={false}
+                intent="alert"
+                description="Unable to load restaurant data. Please try refreshing the page."
+              />
+            ) : (
+              <HStack horizontalAlign="center">
+                <Spinner
+                  aria-label="Loading the city information..."
+                  size="l"
+                />
+              </HStack>
+            )}
           </MainContent>
         ) : (
           <React.Fragment>
             <MainContent>
               <PageTitle>Discover our restaurants</PageTitle>
               <ShelvesContainer>
-                {restaurantData?.length ? (
-                  restaurantData.map((results) => (
-                    <RestaurantShelf
-                      key={results.city.id}
-                      restaurants={results.restaurants}
-                      city={results.city}
-                    />
-                  ))
-                ) : (
-                  <div>No restaurant data available</div>
-                )}
+                {restaurantData.map((results) => (
+                  <RestaurantShelf
+                    key={results.city.id}
+                    restaurants={results.restaurants}
+                    city={results.city}
+                  />
+                ))}
               </ShelvesContainer>
             </MainContent>
             <StyledButtonDock>
