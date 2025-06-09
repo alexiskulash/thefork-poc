@@ -118,15 +118,16 @@ const StyledButtonDock = styled(ButtonDock)`
 `;
 
 const HomePage: NextPage = () => {
+  // Temporarily disable GraphQL query to prevent Apollo errors
+  // This ensures the page works with fallback data while we debug the GraphQL issue
   const { loading, error, data } = useQuery<GetHomePageDataQuery>(
     GET_HOME_PAGE_DATA,
     {
       errorPolicy: 'all',
       notifyOnNetworkStatusChange: true,
-      // Add timeout and retry options
       fetchPolicy: 'cache-first',
-      // Disable query if we know it might fail
-      skip: false,
+      // Skip the query to prevent Apollo errors for now
+      skip: true,
     }
   );
 
