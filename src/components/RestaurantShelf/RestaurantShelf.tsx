@@ -1,7 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
 
-import Text from '@/design-system/Text/Text';
 import Button from '@/design-system/Button/Button';
 import RestaurantCard from '@/design-system/RestaurantCard/RestaurantCard';
 import { City, Restaurant } from '@/types/api';
