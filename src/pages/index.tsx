@@ -95,6 +95,18 @@ const StyledButtonDock = styled(ButtonDock)`
   background: ${({ theme }) =>
     theme.colors.semanticColorsModalPrimaryBackgroundColor};
   border-radius: 0 0 24px 24px;
+
+  button {
+    font-family:
+      'Montserrat',
+      -apple-system,
+      Roboto,
+      Helvetica,
+      sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: ${({ theme }) => theme.colors.semanticColorsTextPrimaryInverse};
+  }
 `;
 
 const HomePage: NextPage = () => {
