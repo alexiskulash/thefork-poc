@@ -56,8 +56,7 @@ const PageContainer = styled.div`
 `;
 
 const MainContent = styled.div`
-  padding: ${({ theme }) => theme.space.coreSpacing11} 21px
-    ${({ theme }) => theme.space.coreSpacing08} 21px;
+  padding: ${({ theme }) => theme.space.coreSpacing11} 21px 120px 21px; /* Extra bottom padding to account for sticky button */
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.space.coreSpacing09};
