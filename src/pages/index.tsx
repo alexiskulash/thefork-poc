@@ -29,12 +29,19 @@ export const GET_HOME_PAGE_DATA = gql`
         photo
         aggregateRatings {
           ratingValue
+          reviewCount
         }
         address {
           locality
           street
           country
+          zipCode
         }
+        averagePrice {
+          value
+          currency
+        }
+        bestOffer
       }
     }
   }
