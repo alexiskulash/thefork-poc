@@ -2,7 +2,11 @@ import styled from '@emotion/styled';
 
 export const Wrapper = styled.div`
   position: relative;
-  min-width: 10.5rem;
+  width: 168px;
+  height: 168px;
+  flex-shrink: 0;
+  border-radius: ${({ theme }) => theme.radii.coreRadiusL};
+  overflow: hidden;
 
   a {
     &:after {
@@ -17,35 +21,41 @@ export const Wrapper = styled.div`
 `;
 
 export const Photo = styled.img`
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   aspect-ratio: 1/1;
   border-radius: ${({ theme }) => theme.radii.coreRadiusL};
 `;
 
 export const Content = styled.div`
-  padding: ${({ theme }) =>
-    `${theme.space.coreSpacing05} ${theme.space.coreSpacing04}`};
   position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
   display: flex;
-  justify-content: center;
-  align-items: flex-end;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0 ${({ theme }) => theme.space.coreSpacing04}
+    ${({ theme }) => theme.space.coreSpacing05}
+    ${({ theme }) => theme.space.coreSpacing04};
   text-align: center;
+  gap: 10px;
   transition: padding-bottom 150ms ease-out;
 
   &:hover {
     padding-bottom: ${({ theme }) => theme.space.coreSpacing06};
   }
 
-  background-image: linear-gradient(
+  background: linear-gradient(
     180deg,
     rgba(0, 0, 0, 0) 0%,
     rgba(0, 0, 0, 0.6) 100%
   );
   border-radius: ${({ theme }) => theme.radii.coreRadiusL};
+
   a {
     color: ${({ theme }) => theme.colors.semanticColorsTextPrimaryInverse};
     text-decoration: none;
