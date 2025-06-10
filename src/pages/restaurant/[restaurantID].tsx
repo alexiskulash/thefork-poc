@@ -488,6 +488,7 @@ const RestaurantPage: NextPage<RestaurantPageProps> = ({ restaurantID }) => {
             <RestaurantShelf
               restaurants={otherRestaurants}
               city={restaurantCity}
+              title={`More restaurants in ${restaurantCity.name}`}
             />
           )}
         </MainContent>
