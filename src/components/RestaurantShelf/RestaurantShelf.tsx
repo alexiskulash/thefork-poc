@@ -27,7 +27,7 @@ const RestaurantShelf: React.FC<RestaurantShelfProps> = ({
     <S.SectionWrapper>
       <S.SectionHeader>
         <S.SectionTitle>
-          <h2>Best restaurants in {city.name}</h2>
+          <h2>More restaurants in {city.name}</h2>
         </S.SectionTitle>
         <S.SeeMoreButton>
           <Button hierarchy="ghost-compact" size="m" onClick={handleSeeMore}>
