@@ -15,6 +15,7 @@ type RestaurantShelfProps = {
 const RestaurantShelf: React.FC<RestaurantShelfProps> = ({
   restaurants,
   city,
+  title,
 }) => {
   const handleSeeMore = () => {
     // Navigate to city page
@@ -24,11 +25,13 @@ const RestaurantShelf: React.FC<RestaurantShelfProps> = ({
   // Show only first 3 restaurants for the horizontal scroll
   const displayRestaurants = restaurants.slice(0, 3);
 
+  const sectionTitle = title || `Best restaurants in ${city.name}`;
+
   return (
     <S.SectionWrapper>
       <S.SectionHeader>
         <S.SectionTitle>
-          <h2>More restaurants in {city.name}</h2>
+          <h2>{sectionTitle}</h2>
         </S.SectionTitle>
         <S.SeeMoreButton>
           <Button hierarchy="ghost-compact" size="m" onClick={handleSeeMore}>
