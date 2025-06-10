@@ -9,6 +9,7 @@ import * as S from './RestaurantShelf.styles';
 type RestaurantShelfProps = {
   restaurants: Restaurant[];
   city: City;
+  title?: string;
 };
 
 const RestaurantShelf: React.FC<RestaurantShelfProps> = ({
