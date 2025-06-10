@@ -52,6 +52,7 @@ const CityRestaurantCard: React.FC<CityRestaurantCardProps> = ({
 
         <S.BookButtonWrapper>
           <Button
+            hierarchy="primary"
             size="s"
             onClick={handleBookNow}
             aria-label={`Book a table at ${restaurant.name}`}
